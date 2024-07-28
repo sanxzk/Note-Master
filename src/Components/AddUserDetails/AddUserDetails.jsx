@@ -19,8 +19,8 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "80%", // Adjust width for different screen sizes
-  maxWidth: 400, // Maximum width for larger screens
+  width: "80%",  
+  maxWidth: 400,  
   bgcolor: "background.paper",
   borderRadius: "1rem",
   border: "1px solid rgba(0,0,0,0.25)",
@@ -44,7 +44,7 @@ export default function AddUserDetails() {
       toast.warn("Please Enter the Details");
       return;
     }
-    // Handle form submission logic here
+   
     dispatch(addDetails(formData));
     toast.success("Details added successfully");
   };
@@ -74,7 +74,7 @@ export default function AddUserDetails() {
                 variant="h5"
                 align="center"
               >
-                Welcome to PlannerPulse
+                Welcome to NoteMaster
               </Typography>
               <Typography color="secondary" variant="h6" align="center">
                 Add User Details

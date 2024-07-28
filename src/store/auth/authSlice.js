@@ -23,13 +23,11 @@ const authSlice = createSlice({
     editDetails: (state) => {
       state.showAddModal = false;
     },
-    logoutUser: (state) => {
+      logoutUser: (state) => {
       state.name = null;
       state.email = null;
       state.notes = [];
-      localStorage.removeItem("name");
-      localStorage.removeItem("email");
-      localStorage.removeItem("notes");
+      localStorage.clear();
       state.openModal = true;
     },
   },

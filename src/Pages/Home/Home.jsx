@@ -5,7 +5,6 @@ import Navbar from "../../Components/Navbar/Navbar";
 import MainContent from "../../Components/MainContent/MainContent";
 import Footer from "../../Components/Footer/Footer";
 import { Grid, Box, Divider } from "@mui/material";
-import AddNote from "../../Components/AddNote/AddNote";
 
 const Home = () => {
   const { openModal } = useSelector((state) => state.auth);
@@ -19,9 +18,7 @@ const Home = () => {
       <Box sx={{ position: 'sticky', top: 0, zIndex: 1 }}>
         <Navbar />
       </Box>
-      <Box>
-        <AddNote />
-      </Box>
+    
       <Divider sx={{ my: 2 }} />
       <Box sx={{ flexGrow: 1 }}>
         <MainContent />

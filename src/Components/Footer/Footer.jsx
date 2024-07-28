@@ -11,7 +11,7 @@ const FooterContainer = styled(Box)(({ theme }) => ({
 }));
 
 const PassionText = styled('span')(({ theme }) => ({
-  color: theme.palette.warning.main, // Using the warning color from the theme
+  color: theme.palette.warning.main,  
 }));
 
 const Footer = () => {

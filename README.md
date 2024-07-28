@@ -4,7 +4,7 @@ A Task Management  application to plan your thinking.
 
 ## Demo Link
 
-Visit the [Note Master Demo](https://note-master-ecru.vercel.app/) to see the application in action.
+Visit the [Note Master Demo](https://) to see the application in action.
 
 ## Basic Outline
 

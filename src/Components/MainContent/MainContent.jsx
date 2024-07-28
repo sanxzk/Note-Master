@@ -13,60 +13,68 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import TodoItem from "../../Components/TodoItem/TodoItem";
+import AddNote from "../AddNote/AddNote";
 
 const StyledBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.shape.borderRadius,
   boxShadow: theme.shadows[1],
+  width: "50%",  
+  margin: "0 auto",  
+  [theme.breakpoints.up('md')]: {
+    width: "50%",  
+  },
+  [theme.breakpoints.down('md')]: {
+    width: "75%",  
+  },
+  [theme.breakpoints.down('sm')]: {
+    width: "100%",  
+  },
 }));
 
-const HeaderContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+const HeaderContainer = styled(Grid)(({ theme }) => ({
   marginBottom: theme.spacing(3),
-  [theme.breakpoints.down('sm')]: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
 }));
 
-const SearchContainer = styled(Box)(({ theme }) => ({
-  width: '300px',
-  marginLeft: theme.spacing(3),
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    marginLeft: 0,
-    marginTop: theme.spacing(2),
-  },
+const HeaderContent = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  width: "100%",
 }));
 
-const PaginationContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
+const SearchContainer = styled(Grid)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+}));
+
+const PaginationContainer = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
   marginTop: theme.spacing(3),
 }));
 
 const NotesContainer = styled(Grid)(({ theme }) => ({
-  justifyContent: 'center',
+  justifyContent: "left",
 }));
 
 const MainContent = () => {
   const { notesList } = useSelector((state) => state.todo);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  
+
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredNotes, setFilteredNotes] = useState(notesList);
-  
+
   const notesPerPage = 10;
 
   useEffect(() => {
-    const filtered = notesList.filter(note => 
-      note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      note.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = notesList.filter(
+      (note) =>
+        note.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        note.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredNotes(filtered);
     setPage(1);
@@ -89,11 +97,23 @@ const MainContent = () => {
 
   return (
     <StyledBox>
-      <HeaderContainer>
-        <Typography variant="h4" color="secondary">
-          All Notes
-        </Typography>
-        <SearchContainer>
+      <HeaderContainer container spacing={3}>
+        <Grid item xs={12}>
+          <HeaderContent container spacing={3}>
+            <Grid item>
+              <Typography variant="h4" sx={{ color: "#67339e" }}>
+                All Notes
+              </Typography>
+            </Grid>
+            <Grid item>
+              <AddNote />
+            </Grid>
+          </HeaderContent>
+        </Grid>
+      </HeaderContainer>
+
+      <SearchContainer container spacing={2}>
+        <Grid item xs={12}>
           <TextField
             fullWidth
             size="small"
@@ -109,43 +129,33 @@ const MainContent = () => {
               ),
             }}
           />
-        </SearchContainer>
-      </HeaderContainer>
+        </Grid>
+      </SearchContainer>
 
       {filteredNotes.length > notesPerPage && (
-        <PaginationContainer>
-          <Pagination
-            count={pageCount}
-            page={page}
-            onChange={handleChangePage}
-            color="primary"
-            size={isMobile ? "small" : "medium"}
-          />
+        <PaginationContainer container spacing={2}>
+          <Grid item>
+            <Pagination
+              count={pageCount}
+              page={page}
+              onChange={handleChangePage}
+              color="primary"
+              size={isMobile ? "small" : "medium"}
+            />
+          </Grid>
         </PaginationContainer>
       )}
 
       <NotesContainer container spacing={3}>
         {displayedNotes.map((note) => (
-          <Grid item xs={12} key={note.id}>
+          <Grid item xs={12} sm={6} md={4} key={note.id}>
             <TodoItem noteItem={note} />
           </Grid>
         ))}
       </NotesContainer>
 
-      {filteredNotes.length > notesPerPage && (
-        <PaginationContainer>
-          <Pagination
-            count={pageCount}
-            page={page}
-            onChange={handleChangePage}
-            color="primary"
-            size={isMobile ? "small" : "medium"}
-          />
-        </PaginationContainer>
-      )}
-
-      {filteredNotes.length === 0 && (
-        <Typography variant="body1" align="center">
+      {filteredNotes.length === 0 && searchTerm.trim()!==''  && (
+        <Typography sx={{marginTop:'3rem'}} variant="body1" align="center">
           No notes found matching your search.
         </Typography>
       )}

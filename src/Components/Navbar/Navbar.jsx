@@ -53,6 +53,10 @@ export default function Navbar() {
     setTimeout(() => {
       dispatch(logoutUser());
     }, 1000);
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
   };
 
   const drawerContent = (
@@ -108,7 +112,7 @@ export default function Navbar() {
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile.
+          keepMounted: true,  
         }}
         sx={{
           display: { xs: "block", md: "none" },

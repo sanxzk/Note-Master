@@ -14,7 +14,7 @@ import EditNote from "../EditNote/EditNote";
 import { format } from "date-fns";
 import { enUS } from "date-fns/locale";
 
-// Styling for the container and buttons
+ 
 const TodoContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -31,7 +31,7 @@ const ButtonGroup = styled(Box)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const DescriptionContainer = styled(Box)(({ theme, expanded }) => ({
+const DescriptionContainer = styled(Box)(({ theme, expanded, readMore }) => ({
   position: 'relative',
   maxHeight: expanded ? 'none' : '100px',
   overflow: 'hidden',
@@ -41,9 +41,10 @@ const DescriptionContainer = styled(Box)(({ theme, expanded }) => ({
     bottom: 0,
     left: 0,
     right: 0,
+    marginTop:'1rem',
     height: '50px',
     background: 'linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))',
-    display: expanded ? 'none' : 'block',
+    display: !expanded && readMore ? 'block' : 'none',
   }
 }));
 
@@ -82,11 +83,11 @@ const TodoItem = ({ noteItem }) => {
     <TodoContainer>
       <Box>
         <Typography variant="h6">{title}</Typography>
-        <DescriptionContainer expanded={expanded}>
-          <Typography variant="body2">{description}</Typography>
+        <DescriptionContainer readMore={shouldShowReadMore} expanded={expanded}>
+          <Typography sx={{overflow:'hidden'}} variant="body2">{description}</Typography>
         </DescriptionContainer>
         {shouldShowReadMore && (
-          <ReadMoreButton onClick={toggleExpanded} variant="text" color="secondary">
+          <ReadMoreButton onClick={toggleExpanded} variant="text" sx={{color:'#67339e'}}>
             {expanded ? "Read Less" : "Read More"}
           </ReadMoreButton>
         )}

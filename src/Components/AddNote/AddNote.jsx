@@ -1,123 +1,155 @@
 import React, { useState } from "react";
 import {
   Box,
-  TextField,
   Button,
   Grid,
-  styled,
   Typography,
+  Modal,
+  IconButton,
+  FormControl,
+  Input,
+  InputLabel,
+  FormHelperText,
+  TextField,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import { useDispatch } from "react-redux";
 import { dispatchAddNote } from "../../store/todo/todoSlice";
 import { toast } from "react-toastify";
 
-// Custom styled components to customize outline color
-const RedOutlinedInput = styled("input")({
-  border: "1px solid red",
-  padding: "10px", // adjust padding as needed
-  borderRadius: "4px", // adjust border radius as needed
-});
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: "80%",
+  maxWidth: 400,
+  bgcolor: "background.paper",
+  borderRadius: "1rem",
+  border: "1px solid rgba(0,0,0,0.25)",
+  boxShadow: 12,
+  p: 4,
+};
 
 const AddNote = () => {
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    if (id === "title") setTitle(value);
+    else if (id === "description") setDescription(value);
   };
 
-  const handleSave = () => {
-    if (title && description) {
-      // Generate unique ID using timestamp
-      const timestamp = new Date().getTime();
-      const newNote = {
-        id: `note_${timestamp}`, // Unique ID based on timestamp
-        title,
-        description,
-      };
-      dispatch(dispatchAddNote(newNote));
-      toast.success("Note added");
-      // Clear form
-      setTitle("");
-      setDescription("");
+  const handleSave = (e) => {
+    e.preventDefault();
+    if (title.trim() === "" || description.trim() === "") {
+      toast.warn("Please enter all details");
+      return;
     }
-  };
-
-  // Function to get today's date in yyyy-mm-dd format
-  const getTodayDate = () => {
-    const today = new Date();
-    const year = today.getFullYear();
-    let month = today.getMonth() + 1;
-    let day = today.getDate();
-
-    if (month < 10) {
-      month = `0${month}`;
-    }
-    if (day < 10) {
-      day = `0${day}`;
-    }
-
-    return `${year}-${month}-${day}`;
+    // Generate unique ID using timestamp
+    const timestamp = new Date().getTime();
+    const newNote = {
+      id: `note_${timestamp}`, // Unique ID based on timestamp
+      title,
+      description,
+    };
+    dispatch(dispatchAddNote(newNote));
+    toast.success("Note added");
+    // Clear form
+    setTitle("");
+    setDescription("");
+    handleClose();
   };
 
   return (
-    <Box sx={{ p: 2, maxWidth: 800, margin: "0.5rem 0", mx: "auto" }}>
-    <Typography sx={{margin:"1rem 0rem"}} color="secondary"  variant="h5">Add a new Note</Typography>
-      <Grid container spacing={2} alignItems="center">
-        <Grid item xs={12} sm={4}>
-          <TextField
-            label="Title"
-            variant="outlined"
-            fullWidth
-            size="small"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            InputProps={{
-              inputComponent: RedOutlinedInput, // Using custom styled input component
-            }}
-            InputLabelProps={{
-              shrink: true,
-              classes: {
-                root: "red-outline", // Adding a class to root element for custom styles
-              },
-              className: "red-label", // Adding a class name for custom label styles
-            }}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            label="Description"
-            variant="outlined"
-            fullWidth
-            size="small"
-            value={description}
-            onChange={handleDescriptionChange}
-            InputProps={{
-              inputComponent: RedOutlinedInput, // Using custom styled input component
-            }}
-            InputLabelProps={{
-              shrink: true,
-              classes: {
-                root: "red-outline", // Adding a class to root element for custom styles
-              },
-              className: "red-label", // Adding a class name for custom label styles
-            }}
-          />
-        </Grid>
-        <Grid sx={{ margin: "auto" }} item xs={6} sm={2}>
-          <Button
-          onClick={handleSave}
-            type="submit"
-            variant="contained"
-            sx={{ backgroundColor: " #67339e" }}
-            fullWidth
-          >
-            Submit
-          </Button>
-        </Grid>
-      </Grid>
-    </Box>
+    <div>
+      <IconButton color="primary" onClick={handleOpen}>
+        <AddIcon style={{ color: "#67339e" }} />
+        <Typography sx={{ color: '#67339e', marginLeft: 1 }} variant="h6">
+          Add Note
+        </Typography>
+      </IconButton>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={modalStyle}>
+          <Grid container spacing={2} justifyContent="center" alignItems="center">
+            <Grid item xs={12}>
+              <Typography variant="h5" align="center">
+                Add a New Note
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <form onSubmit={handleSave}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="title">Title</InputLabel>
+                      <Input
+                        id="title"
+                        aria-describedby="title"
+                        value={title}
+                        onChange={handleChange}
+                      />
+                      <FormHelperText id="title">
+                        Enter the note title.
+                      </FormHelperText>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                  <FormControl fullWidth>
+                  <TextField
+                    id="description"
+                    label="Description"
+                    aria-describedby="description"
+                    value={description}
+                    onChange={handleChange}
+                    multiline
+                    minRows={4}
+                    maxRows={6}
+                    variant="outlined"
+                  />
+                  <FormHelperText id="description">
+                    Enter the note description.
+                  </FormHelperText>
+                </FormControl>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{ backgroundColor: "#67339e" }}
+                      fullWidth
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      onClick={handleClose}
+                      fullWidth
+                    >
+                      Cancel
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
+            </Grid>
+          </Grid>
+        </Box>
+      </Modal>
+    </div>
   );
 };
 

@@ -37,8 +37,8 @@ const todoSlice = createSlice({
     dispatchAddNote: (state, action) => {
       const newNote = {
         ...action.payload,
-        createdAt: new Date().toISOString(), // Set createdAt
-        updatedAt: new Date().toISOString(), // Set updatedAt
+        createdAt: new Date().toISOString(),  
+        updatedAt: new Date().toISOString(),  
       };
       state.notesList.push(newNote);
       localStorage.setItem("notes", JSON.stringify(state.notesList));
@@ -51,7 +51,7 @@ const todoSlice = createSlice({
     updateNote: (state, action) => {
       const updatedNote = {
         ...action.payload,
-        updatedAt: new Date().toISOString(), // Update updatedAt
+        updatedAt: new Date().toISOString(),  
       };
       const index = state.notesList.findIndex((note) => note.id === action.payload.id);
       if (index !== -1) {

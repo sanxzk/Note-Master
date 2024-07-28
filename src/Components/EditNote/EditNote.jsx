@@ -5,17 +5,16 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import {
   FormControl,
-  FormHelperText,
   Input,
   InputLabel,
+  FormHelperText,
   Grid,
   IconButton,
-  Select,
-  MenuItem,
+  TextField,  
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
-import { updateNote } from "../../store/todo/todoSlice"; // Ensure you have the correct path
+import { updateNote } from "../../store/todo/todoSlice";  
 import { toast } from "react-toastify";
 
 const style = {
@@ -52,7 +51,7 @@ const EditNote = ({ note }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (title.trim() === "" || description.trim() === "") {
-      toast.warn("Please Enter the Details");
+      toast.warn("Please enter all details");
       return;
     }
     const updatedNote = {
@@ -72,7 +71,7 @@ const EditNote = ({ note }) => {
   };
 
   if (!note) {
-    return null; // or render a message indicating that the note is not available
+    return null;  
   }
 
   return (
@@ -87,12 +86,7 @@ const EditNote = ({ note }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Grid
-            container
-            spacing={2}
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Grid container spacing={2} justifyContent="center" alignItems="center">
             <Grid item xs={12}>
               <Typography variant="h5" align="center">
                 Edit Note
@@ -117,19 +111,22 @@ const EditNote = ({ note }) => {
                   </Grid>
                   <Grid item xs={12}>
                     <FormControl fullWidth>
-                      <InputLabel htmlFor="description">Description</InputLabel>
-                      <Input
+                      <TextField
                         id="description"
+                        label="Description"
                         aria-describedby="description"
                         value={description}
                         onChange={handleChange}
+                        multiline
+                        minRows={4}
+                        maxRows={6}
+                        variant="outlined"
                       />
                       <FormHelperText id="description">
                         Enter the note description.
                       </FormHelperText>
                     </FormControl>
                   </Grid>
-
                   <Grid item xs={6}>
                     <Button
                       type="submit"
